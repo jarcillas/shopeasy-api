@@ -1,23 +1,16 @@
 const express = require('express');
 
+const shopeasyRoutes = require('./src/shopeasy/routes');
+
 const app = express();
+const port = 3000;
 
-app.get('/', (req, res) => {
-  res.json({
-    grocerylist: [
-      { name: 'Coke', amount: 2, unit: 'L', note: 'For the party' },
-      {
-        name: 'Purefoods Corned Beef 80g',
-        amount: 2,
-        unit: 'cans',
-        note: 'For breakfast',
-      },
-    ],
-  });
-});
+app.use(express.json());
 
-app.listen(5000, () => {
-  console.log('Running on port 5000.');
+app.use('/api/v1/shopeasy', shopeasyRoutes);
+
+app.listen(port, () => {
+  console.log(`Running on port ${port}.`);
 });
 
 // Export the Express API
