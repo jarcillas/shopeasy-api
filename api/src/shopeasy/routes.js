@@ -12,6 +12,8 @@ router.get('/users/:id', controller.getUserById);
 
 router.post('/users', controller.addUser);
 
+router.put('/users/:id', controller.updateUser);
+
 router.delete('/users/:id', controller.removeUser);
 
 // router.get('/list', (req, res) => {

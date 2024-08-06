@@ -40,6 +40,30 @@ const addUser = (req, res) => {
   });
 };
 
+const updateUser = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const { name } = req.body;
+
+  // check that id exists
+  pool.query(queries.getUserById, [id], (error, results) => {
+    if (error) throw error;
+    console.log('results:', results.rows);
+    const noUserFound = !results.rows.length;
+    if (noUserFound) {
+      res.send('User does not exist in the database.');
+      return;
+    }
+
+    // update user's name with given id
+    pool.query(queries.updateUserName, [id, name], (error, results) => {
+      if (error) throw error;
+      res.status(200).send('User updated successfully.');
+      console.log('User updated successfully.');
+    });
+  });
+};
+
 const removeUser = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -56,10 +80,17 @@ const removeUser = (req, res) => {
     // delete user with given id
     pool.query(queries.removeUser, [id], (error, results) => {
       if (error) throw error;
-      res.status(201).send('User deleted successfully.');
+      res.status(200).send('User deleted successfully.');
       console.log('User deleted successfully.');
     });
   });
 };
 
-module.exports = { root, getUsers, getUserById, addUser, removeUser };
+module.exports = {
+  root,
+  getUsers,
+  getUserById,
+  addUser,
+  updateUser,
+  removeUser,
+};
