@@ -1,3 +1,5 @@
+// users queries
+
 const getUsers = 'SELECT * FROM users';
 
 const getUserById = 'SELECT * FROM users WHERE id = $1';
@@ -11,6 +13,10 @@ const updateUserName = 'UPDATE users SET name = $2 WHERE id = $1';
 
 const removeUser = 'DELETE FROM users WHERE id = $1';
 
+// shoplists queries
+
+const getShoplistsByUserId = 'SELECT * FROM shoplists WHERE user_id = $1';
+
 module.exports = {
   getUsers,
   getUserById,
@@ -18,4 +24,5 @@ module.exports = {
   addUser,
   updateUserName,
   removeUser,
+  getShoplistsByUserId,
 };

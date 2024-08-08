@@ -86,6 +86,29 @@ const removeUser = (req, res) => {
   });
 };
 
+// shoplists
+
+const getShoplistsByUserId = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  // check if user exists
+  pool.query(queries.getUserById, [id], (error, results) => {
+    if (error) throw error;
+    console.log('results:', results.rows);
+    const noUserFound = !results.rows.length;
+    if (noUserFound) {
+      res.send('User does not exist in the database.');
+      return;
+    }
+
+    // delete user with given id
+    pool.query(queries.getShoplistsByUserId, [id], (error, results) => {
+      if (error) throw error;
+      res.status(200).json(results.rows);
+    });
+  });
+};
+
 module.exports = {
   root,
   getUsers,
@@ -93,4 +116,5 @@ module.exports = {
   addUser,
   updateUser,
   removeUser,
+  getShoplistsByUserId,
 };
