@@ -17,8 +17,13 @@ const removeUser = 'DELETE FROM users WHERE id = $1';
 
 const getShoplistsByUserId = 'SELECT * FROM shoplists WHERE user_id = $1';
 
+const getShoplist = 'SELECT * FROM shoplists WHERE id = $2 AND user_id = $1';
+
 const addShoplistToUser =
   'INSERT INTO shoplists (title, status, user_id) VALUES ($1, $2, $3)';
+
+const updateShoplist =
+  'UPDATE shoplists SET name = $2, status = $3 WHERE id = $1';
 
 module.exports = {
   getUsers,
@@ -28,5 +33,7 @@ module.exports = {
   updateUserName,
   removeUser,
   getShoplistsByUserId,
+  getShoplist,
   addShoplistToUser,
+  updateShoplist,
 };

@@ -18,6 +18,10 @@ router.delete('/users/:id', controller.removeUser);
 
 router.get('/users/:id/shoplist', controller.getShoplistsByUserId);
 
+router.get('/users/:userId/shoplist/:shoplistId', controller.getShoplist);
+
 router.post('/users/:id/shoplist', controller.addShoplistToUser);
+
+// router.put('/users/:id/shoplist/:slid', controller.updateShoplist);
 
 module.exports = router;
