@@ -101,11 +101,39 @@ const getShoplistsByUserId = (req, res) => {
       return;
     }
 
-    // delete user with given id
+    // get shoplists of user
     pool.query(queries.getShoplistsByUserId, [id], (error, results) => {
       if (error) throw error;
       res.status(200).json(results.rows);
     });
+  });
+};
+
+const addShoplistToUser = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const { title, status } = req.body;
+
+  // check if user exists
+  pool.query(queries.getUserById, [id], (error, results) => {
+    if (error) throw error;
+    console.log('results:', results.rows);
+    const noUserFound = !results.rows.length;
+    if (noUserFound) {
+      res.send('User does not exist in the database.');
+      return;
+    }
+
+    // add shoplist to user
+    pool.query(
+      queries.addShoplistToUser,
+      [title, status, id],
+      (error, results) => {
+        if (error) throw error;
+        res.status(201).send('Shoplist created successfully.');
+        console.log('Shoplist created successfully.');
+      }
+    );
   });
 };
 
@@ -117,4 +145,5 @@ module.exports = {
   updateUser,
   removeUser,
   getShoplistsByUserId,
+  addShoplistToUser,
 };
