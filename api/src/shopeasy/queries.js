@@ -23,7 +23,7 @@ const addShoplistToUser =
   'INSERT INTO shoplists (title, status, user_id) VALUES ($1, $2, $3)';
 
 const updateShoplist =
-  'UPDATE shoplists SET name = $2, status = $3 WHERE id = $1';
+  'UPDATE shoplists SET title = $3, status = $4 WHERE id = $2 AND user_id = $1';
 
 module.exports = {
   getUsers,

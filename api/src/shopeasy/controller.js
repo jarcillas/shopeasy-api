@@ -164,31 +164,38 @@ const addShoplistToUser = (req, res) => {
 };
 
 const updateShoplist = (req, res) => {
-  const id = parseInt(req.params.id);
+  const { userId, shoplistId } = req.params;
 
   const { title, status } = req.body;
 
   // check if user exists
-  pool.query(queries.getUserById, [id], (error, results) => {
+  pool.query(queries.getUserById, [userId], (error, results) => {
     if (error) throw error;
-    console.log('results:', results.rows);
     const noUserFound = !results.rows.length;
     if (noUserFound) {
       res.send('User does not exist in the database.');
       return;
     }
 
-    // add shoplist to user
-    pool.query(
-      queries.updateShoplist,
-      [title, status, id],
-      (error, results) => {
-        if (error) throw error;
-        res.status(201).send('Shoplist updated successfully.');
-        console.log('Shoplist updated successfully.');
-        console.log(results.rows);
+    // get shoplist of user if it exists
+    pool.query(queries.getShoplist, [userId, shoplistId], (error, results) => {
+      if (error) throw error;
+      const noShoplistFound = !results.rows.length;
+      if (noShoplistFound) {
+        res.send('User does not have the given shoplist.');
+        return;
       }
-    );
+
+      // update shoplist
+      pool.query(
+        queries.updateShoplist,
+        [userId, shoplistId, title, status],
+        (error, results) => {
+          if (error) throw error;
+          res.status(201).send('Shoplist updated successfully.');
+        }
+      );
+    });
   });
 };
 
@@ -202,5 +209,5 @@ module.exports = {
   getShoplistsByUserId,
   getShoplist,
   addShoplistToUser,
-  // updateShoplist,
+  updateShoplist,
 };

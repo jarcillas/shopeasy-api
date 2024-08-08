@@ -22,6 +22,6 @@ router.get('/users/:userId/shoplist/:shoplistId', controller.getShoplist);
 
 router.post('/users/:id/shoplist', controller.addShoplistToUser);
 
-// router.put('/users/:id/shoplist/:slid', controller.updateShoplist);
+router.put('/users/:userId/shoplist/:shoplistId', controller.updateShoplist);
 
 module.exports = router;
