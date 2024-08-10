@@ -16,18 +16,14 @@ router.put('/users/:id', controller.updateUser);
 
 router.delete('/users/:id', controller.removeUser);
 
-// router.get('/list', (req, res) => {
-//   res.json({
-//     grocerylist: [
-//       { name: 'Coke', amount: 2, unit: 'L', note: 'For the party' },
-//       {
-//         name: 'Purefoods Corned Beef 80g',
-//         amount: 2,
-//         unit: 'cans',
-//         note: 'For breakfast',
-//       },
-//     ],
-//   });
-// });
+router.get('/users/:id/shoplist', controller.getShoplistsByUserId);
+
+router.get('/users/:userId/shoplist/:shoplistId', controller.getShoplist);
+
+router.post('/users/:id/shoplist', controller.addShoplistToUser);
+
+router.put('/users/:userId/shoplist/:shoplistId', controller.updateShoplist);
+
+router.delete('/users/:userId/shoplist/:shoplistId', controller.deleteShoplist);
 
 module.exports = router;
