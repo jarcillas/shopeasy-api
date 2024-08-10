@@ -199,6 +199,40 @@ const updateShoplist = (req, res) => {
   });
 };
 
+const deleteShoplist = (req, res) => {
+  const { userId, shoplistId } = req.params;
+
+  // check if user exists
+  pool.query(queries.getUserById, [userId], (error, results) => {
+    if (error) throw error;
+    const noUserFound = !results.rows.length;
+    if (noUserFound) {
+      res.send('User does not exist in the database.');
+      return;
+    }
+
+    // get shoplist of user if it exists
+    pool.query(queries.getShoplist, [userId, shoplistId], (error, results) => {
+      if (error) throw error;
+      const noShoplistFound = !results.rows.length;
+      if (noShoplistFound) {
+        res.send('User does not have the given shoplist.');
+        return;
+      }
+
+      // delete shoplist
+      pool.query(
+        queries.deleteShoplist,
+        [userId, shoplistId],
+        (error, results) => {
+          if (error) throw error;
+          res.status(200).send('Shoplist deleted successfully.');
+        }
+      );
+    });
+  });
+};
+
 module.exports = {
   root,
   getUsers,
@@ -210,4 +244,5 @@ module.exports = {
   getShoplist,
   addShoplistToUser,
   updateShoplist,
+  deleteShoplist,
 };

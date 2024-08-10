@@ -24,4 +24,6 @@ router.post('/users/:id/shoplist', controller.addShoplistToUser);
 
 router.put('/users/:userId/shoplist/:shoplistId', controller.updateShoplist);
 
+router.delete('/users/:userId/shoplist/:shoplistId', controller.deleteShoplist);
+
 module.exports = router;
