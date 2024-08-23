@@ -27,6 +27,13 @@ const updateShoplist =
 
 const deleteShoplist = 'DELETE FROM shoplists WHERE id = $2 AND user_id = $1';
 
+// items queries
+
+const getItemById = 'SELECT * FROM items WHERE id = $1';
+
+const getShoplistItems =
+  'SELECT *, unit_price * quantity AS total_price FROM items WHERE shoplist_id = $1';
+
 module.exports = {
   getUsers,
   getUserById,
@@ -39,4 +46,6 @@ module.exports = {
   addShoplistToUser,
   updateShoplist,
   deleteShoplist,
+  getItemById,
+  getShoplistItems,
 };

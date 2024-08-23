@@ -233,6 +233,31 @@ const deleteShoplist = (req, res) => {
   });
 };
 
+// Items
+
+const getItemById = (req, res) => {
+  const id = req.params.id;
+
+  pool.query(queries.getItemById, [id], (error, results) => {
+    if (error) throw error;
+    const noItemFound = !results.rows.length;
+    if (noItemFound) {
+      res.send('Item does not exist in the database.');
+      return;
+    }
+    res.status(200).json(results.rows);
+  });
+};
+
+const getShoplistItems = (req, res) => {
+  const id = req.params.id;
+
+  pool.query(queries.getShoplistItems, [id], (error, results) => {
+    if (error) throw error;
+    res.status(200).json(results.rows);
+  });
+};
+
 module.exports = {
   root,
   getUsers,
@@ -245,4 +270,6 @@ module.exports = {
   addShoplistToUser,
   updateShoplist,
   deleteShoplist,
+  getItemById,
+  getShoplistItems,
 };
