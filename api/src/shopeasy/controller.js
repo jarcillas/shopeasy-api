@@ -1,4 +1,4 @@
-const pool = require('../../db');
+const { User } = require('../../db');
 
 const queries = require('./queries');
 
@@ -6,39 +6,56 @@ const root = (req, res) => {
   res.send('Welcome to the ShopEasy API');
 };
 
-const getUsers = (req, res) => {
-  pool.query(queries.getUsers, (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
-  });
+const getUsers = async (req, res) => {
+  const users = await User.findAll();
+  res.status(200).json(users);
 };
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
   const id = parseInt(req.params.id);
-  pool.query(queries.getUserById, [id], (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
+
+  const user = await User.findOne({
+    where: {
+      id,
+    },
   });
+
+  if (user) {
+    res.status(200).json(user);
+    return;
+  }
+  res.status(404).send('User does not exist.');
 };
 
-const addUser = (req, res) => {
+const addUser = async (req, res) => {
   const { name, email, age, dob } = req.body;
 
-  // check that email exists
-  pool.query(queries.checkEmailExists, [email], (error, results) => {
-    if (results.rows.length) {
-      res.send('Email already exists.');
-      return;
-    }
-
-    // add user to db
-    pool.query(queries.addUser, [name, email, age, dob], (error, results) => {
-      if (error) throw error;
-      res.status(201).send('User created successfully.');
-      console.log('User created successfully.');
-    });
+  // check if the email is already used
+  const existingUser = await User.findOne({
+    where: {
+      email,
+    },
   });
+
+  if (existingUser) {
+    res.send('Email already exists.');
+    return;
+  }
+
+  const newUser = await User.create({
+    name,
+    email,
+    age,
+    dob,
+  });
+
+  if (newUser) {
+    res.status(201).send('User created successfully.');
+    console.log('User created successfully.');
+  }
 };
+
+// TODO: update the rest with sequelize methods instead:
 
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);

@@ -1,5 +1,4 @@
 require('dotenv').config();
-const Pool = require('pg').Pool;
 
 const {
   POSTGRES_USER,
@@ -9,12 +8,28 @@ const {
   POSTGRES_PORT,
 } = process.env;
 
-const pool = new Pool({
-  user: POSTGRES_USER,
+const { Sequelize, DataTypes } = require('sequelize');
+
+const sequelize = new Sequelize(POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, {
   host: POSTGRES_HOST,
-  database: POSTGRES_DB,
-  password: POSTGRES_PASSWORD,
   port: POSTGRES_PORT,
+  dialect: 'postgres',
 });
 
-module.exports = pool;
+const User = require('./src/shopeasy/models/User')(sequelize, DataTypes);
+const Shoplist = require('./src/shopeasy/models/Shoplist')(
+  sequelize,
+  DataTypes
+);
+const Item = require('./src/shopeasy/models/Item')(sequelize, DataTypes);
+
+User.hasMany(Shoplist);
+
+Shoplist.hasMany(Item);
+
+module.exports = {
+  sequelize,
+  User,
+  Shoplist,
+  Item,
+};
