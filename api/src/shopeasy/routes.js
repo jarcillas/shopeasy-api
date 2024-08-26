@@ -16,18 +16,18 @@ router.put('/users/:id', controller.updateUser);
 
 router.delete('/users/:id', controller.removeUser);
 
-router.get('/users/:id/shoplist', controller.getShoplistsByUserId);
+router.get('/users/:id/shoplists', controller.getShoplistsByUserId);
 
-router.get('/users/:userId/shoplist/:shoplistId', controller.getShoplist);
+// router.get('/users/:userId/shoplist/:shoplistId', controller.getShoplist);
 
-router.post('/users/:id/shoplist', controller.addShoplistToUser);
+// router.post('/users/:id/shoplists', controller.addShoplistToUser);
 
-router.put('/users/:userId/shoplist/:shoplistId', controller.updateShoplist);
+// router.put('/users/:userId/shoplist/:shoplistId', controller.updateShoplist);
 
-router.delete('/users/:userId/shoplist/:shoplistId', controller.deleteShoplist);
+// router.delete('/users/:userId/shoplist/:shoplistId', controller.deleteShoplist);
 
-router.get('/item/:id', controller.getItemById);
+// router.get('/item/:id', controller.getItemById);
 
-router.get('/shoplist/:id/items', controller.getShoplistItems);
+// router.get('/shoplist/:id/items', controller.getShoplistItems);
 
 module.exports = router;

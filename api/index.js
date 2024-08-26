@@ -1,5 +1,22 @@
 const express = require('express');
-const { sequelize } = require('./db');
+const { sequelize, Role } = require('./src/shopeasy/db');
+
+const initialize = () => {
+  Role.create({
+    id: 1,
+    name: 'user',
+  });
+
+  Role.create({
+    id: 2,
+    name: 'moderator',
+  });
+
+  Role.create({
+    id: 3,
+    name: 'admin',
+  });
+};
 
 // Authenticate database connection
 
@@ -11,6 +28,7 @@ sequelize
       .sync({ force: true }) // Use `force: false` to prevent dropping existing tables
       .then(() => {
         console.log('Database & tables synced!');
+        initialize();
       })
       .catch((err) => {
         console.error('Unable to sync database:', err);

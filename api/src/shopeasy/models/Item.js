@@ -1,3 +1,10 @@
+/**
+ *
+ * @param {import('sequelize').Sequelize} sequelize
+ * @param {import('sequelize').DataTypes} DataTypes
+ * @returns
+ */
+
 const createItemModel = (sequelize, DataTypes) => {
   const Item = sequelize.define(
     'Item',
