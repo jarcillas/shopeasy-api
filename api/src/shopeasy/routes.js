@@ -2,9 +2,34 @@ const { Router } = require('express');
 
 const controller = require('./controller');
 
+const { signin, signup } = require('./controllers/auth.controller');
+
+const {
+  checkDuplicateUsernameOrEmail,
+  checkRolesExisted,
+} = require('./middleware/verifySignup');
+
 const router = Router();
 
 router.get('/', controller.root);
+
+// auth routes
+
+router.use((req, res, next) => {
+  res.header(
+    'Access-Control-Allow-Headers',
+    'x-access-token, Origin, Content-Type, Accept'
+  );
+  next();
+});
+
+router.post(
+  '/auth/signup',
+  [checkDuplicateUsernameOrEmail, checkRolesExisted],
+  signup
+);
+
+router.post('/auth/signin', signin);
 
 router.get('/users', controller.getUsers);
 
