@@ -6,15 +6,16 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const signup = (req, res) => {
-  const { username, email, password, roles } = req.body;
+  const { username, name, email, password, roles } = req.body;
 
   const salt = bcrypt.genSaltSync();
   // Save user to db
   User.create({
     username,
+    name,
     email,
     salt,
-    hashedPassword: bcrypt.hashSync(req, body.password, salt),
+    hashedPassword: bcrypt.hashSync(password, salt),
   })
     .then((user) => {
       if (roles) {
@@ -27,16 +28,19 @@ const signup = (req, res) => {
         }).then((roles) => {
           user.setRoles(roles).then(() => {
             res.send({ message: 'User was registered successfully!' });
+            return;
           });
         });
       } else {
         user.setRoles([1]).then(() => {
           res.send({ message: 'User was registered successfully!' });
+          return;
         });
       }
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
+      return;
     });
 };
 
@@ -81,10 +85,12 @@ const signin = (req, res) => {
           roles: authorities,
           accessToken: token,
         });
+        return;
       });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
+      return;
     });
 };
 
