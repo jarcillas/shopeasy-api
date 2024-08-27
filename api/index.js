@@ -1,5 +1,7 @@
 const express = require('express');
-const { sequelize, Role } = require('./src/shopeasy/db');
+const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
+const { sequelize, Role, User } = require('./src/shopeasy/db');
 
 const initialize = () => {
   Role.create({
@@ -16,6 +18,59 @@ const initialize = () => {
     id: 3,
     name: 'admin',
   });
+
+  const salt = bcrypt.genSaltSync(12);
+
+  const createUser = (userObj, roles) => {
+    User.create(userObj).then((user) => {
+      if (roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: roles,
+            },
+          },
+        }).then((roles) => {
+          user.setRoles(roles);
+        });
+      } else {
+        user.setRoles([1]);
+      }
+    });
+  };
+
+  createUser(
+    {
+      username: 'test_user',
+      name: 'User',
+      email: 'user@shopeasy.com',
+      hashedPassword: bcrypt.hashSync('ezpz_lemonSqueezy', salt),
+      salt,
+    },
+    ['user']
+  );
+
+  createUser(
+    {
+      username: 'test_moderator',
+      name: 'Moderator',
+      email: 'moderator@shopeasy.com',
+      hashedPassword: bcrypt.hashSync('ezpz_lemonSqueezy', salt),
+      salt,
+    },
+    ['moderator']
+  );
+
+  createUser(
+    {
+      username: 'test_admin',
+      name: 'Admin',
+      email: 'admin@shopeasy.com',
+      hashedPassword: bcrypt.hashSync('ezpz_lemonSqueezy', salt),
+      salt,
+    },
+    ['admin']
+  );
 };
 
 // Authenticate database connection

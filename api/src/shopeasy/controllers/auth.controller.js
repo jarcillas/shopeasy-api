@@ -1,4 +1,4 @@
-const { Sequelize, Op } = require('sequelize');
+const { Op } = require('sequelize');
 const { User, Role } = require('../db');
 const config = require('../config/auth.config');
 

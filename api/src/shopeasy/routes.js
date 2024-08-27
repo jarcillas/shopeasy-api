@@ -2,6 +2,8 @@ const { Router } = require('express');
 
 const controller = require('./controller');
 
+const authRoutes = require('./routes/auth.routes');
+
 const { signin, signup } = require('./controllers/auth.controller');
 
 const {
@@ -22,6 +24,8 @@ router.use((req, res, next) => {
   );
   next();
 });
+
+authRoutes(router);
 
 router.post(
   '/auth/signup',

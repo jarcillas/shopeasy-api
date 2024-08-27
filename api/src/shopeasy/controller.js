@@ -1,6 +1,6 @@
-const { User } = require('./db');
+const { User, Role } = require('./db');
 
-const queries = require('./queries');
+// const queries = require('./queries');
 
 const root = (req, res) => {
   res.send('Welcome to the ShopEasy API');
@@ -35,7 +35,11 @@ const addUser = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: [
+      { model: Role, attributes: ['id', 'name'], through: { attributes: [] } },
+    ],
+  });
   res.status(200).json(users);
 };
 
